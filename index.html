@@ -1,43 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>iPhone-price-chart</title>
-    <style type="text/css">
 
-    </style>
-  </head>
-  <body>
-    <div id="main" style="width: 600px;height:400px;"></div>
-    <script src="./echarts.simple.min.js"></script>
-    <script type="text/javascript">
-      // 基于准备好的dom，初始化echarts实例
-      var myChart = echarts.init(document.getElementById('main'));
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>iPhone-price-chart</title>
+  <style type="text/css">
 
-      // 指定图表的配置项和数据
+  </style>
+</head>
+
+<body>
+  <div id="X64C" style="width: 100%;height:400px;"></div>
+  <div id="X256C" style="width: 100%;height:400px;"></div>
+  <script src="./echarts.common.min.js"></script>
+  <script type="text/javascript">
+
+    var xAxis = ['2018-10-07', '2018-10-08', '2018-10-09', '2018-10-10']
+
+    var X64CyAxis = [
+      [7099],
+      [7099],
+      [6970],
+      [7010],
+      [6988],
+      [7028],
+    ]
+
+    var X256CyAxis = [
+      [8299],
+      [8299],
+      [8020],
+      [7960],
+      [8068],
+      [8058]
+    ]
+
+    function init (id, title, yAxis, legend) {
+      var myChart = echarts.init(document.getElementById(id));
+      legend = legend || ['京东-黑', '京东-白', '京东-金', '苹果团-黑', '苹果团-白', '苹果团-金', '麦克先生-黑', '麦克先生-白', '麦克先生-金']
+      var series = legend.map(function (item, index) {
+        return {
+          name: item,
+          type: 'line',
+          data: yAxis[index]
+        }
+      })
       var option = {
         title: {
-          text: 'ECharts 入门示例'
+          text: title,
+          left: 'center'
         },
-        tooltip: {},
         legend: {
-          data: ['销量']
+          type: 'scroll',
+          data: legend,
+          top: 30
         },
-        xAxis: {
-          data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
+        grid: {
+          left: 60,
+          right: 60
         },
-        yAxis: {},
-        series: [{
-          name: '销量',
-          type: 'bar',
-          data: [5, 20, 36, 10, 10, 20]
-        }]
-      };
-
-      // 使用刚指定的配置项和数据显示图表。
+        tooltip: {
+          trigger: 'axis'
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {}
+          },
+          right: 60
+        },
+        xAxis: [
+          {
+            type: 'category',
+            boundaryGap: false,
+            data: xAxis
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value',
+            min: function (value) {
+              return value.min - 100;
+            }
+          }
+        ],
+        series: series
+      }
       myChart.setOption(option);
-    </script>
-  </body>
+    }
+
+    init('X64C', '国行 iPhoneX 64G 价格趋势', X64CyAxis, ['京东-黑', '京东-白', '苹果团-黑', '苹果团-白', '麦克先生-黑', '麦克先生-白'])
+    init('X256C', '国行 iPhoneX 256G 价格趋势', X256CyAxis, ['京东-黑', '京东-白', '苹果团-黑', '苹果团-白', '麦克先生-黑', '麦克先生-白'])
+  </script>
+</body>
+
 </html>
