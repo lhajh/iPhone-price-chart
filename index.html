@@ -70,6 +70,8 @@
     ]
 
     function init (id, title, yAxis, legend) {
+      var date = ''
+      var formatResult = ''
       var myChart = echarts.init(document.getElementById(id));
       legend = legend || ['京东-黑', '京东-白', '京东-金', '苹果团-C-黑', '苹果团-C-白', '苹果团-C-金', '苹果团-H-黑', '苹果团-H-白', '苹果团-H-金', '麦克先生-C-黑', '麦克先生-C-白', '麦克先生-C-金', '麦克先生-H-黑', '麦克先生-H-白', '麦克先生-H-金']
       var series = legend.map(function (item, index) {
@@ -94,7 +96,21 @@
           right: 60
         },
         tooltip: {
-          trigger: 'axis'
+          trigger: 'axis',
+          formatter: function (params, ticket, callback) {
+            if (date !== params[0].name) {
+              date = params[0].name
+              params.sort(function (a, b) {
+                return b.data - a.data;
+              })
+              formatResult = params[0].name + '<br>'
+              params.forEach(function (item) {
+                formatResult += item.marker + item.seriesName + ': ' + item.data + '<br>'
+              })
+            console.log(11)
+            }
+            return formatResult
+          }
         },
         toolbox: {
           feature: {
